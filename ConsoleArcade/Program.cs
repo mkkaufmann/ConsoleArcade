@@ -10,7 +10,8 @@ namespace ConsoleArcade
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello");
+            Game game = new Game();
+            game.Pause();
         }
     }
 }
