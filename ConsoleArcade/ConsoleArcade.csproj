@@ -42,8 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Arcade\Game.cs">
+    <Compile Include="..\Game.cs">
       <Link>Game.cs</Link>
+    </Compile>
+    <Compile Include="..\MainMenu.cs">
+      <Link>MainMenu.cs</Link>
+    </Compile>
+    <Compile Include="..\Menu.cs">
+      <Link>Menu.cs</Link>
+    </Compile>
+    <Compile Include="..\Point.cs">
+      <Link>Point.cs</Link>
+    </Compile>
+    <Compile Include="..\Snake.cs">
+      <Link>Snake.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
