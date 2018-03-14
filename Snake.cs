@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 
 public class Snake : Game
@@ -10,17 +12,20 @@ public class Snake : Game
     public ConsoleColor foodclr = ConsoleColor.Red;//food color
     public Point currentFood;//current food object
     private Random rand;//rng
-    private Timer timer;
+    private System.Timers.Timer timer;
     private Direction dir;
     private string name = "Snake";
     private bool stopped = false;
     public Menu menu;
-    public Snake()
+    private Menu gameOver;
+    private Thread keys;
+    private bool canChange = true;
+    public Snake(Menu _menu)
     {
         //initialize the body and rng
         rand = new Random();
         body = new List<Point>();
-        timer = new Timer();
+        timer = new System.Timers.Timer();
         timer.Interval = 150;
         timer.AutoReset = true;
         timer.Elapsed += timerElapsed;
@@ -33,6 +38,10 @@ public class Snake : Game
         drawSnake();
         generateFood();
 
+        menu = _menu;
+        keys = new Thread(Run);
+        keys.Start();
+        gameOver = new Menu("gameOver.txt");
         timer.Enabled = true;
     }
     private void timerElapsed(object sender, ElapsedEventArgs e)
@@ -72,6 +81,7 @@ public class Snake : Game
     //move the snake
     public void draw(Direction dir)
     {
+        canChange = true;
         //new front of the snake
         Point p = null;
         //set the new position based on the current direction
@@ -145,13 +155,15 @@ public class Snake : Game
         Console.BackgroundColor = foodclr;
         Console.Write("  ");
     }
-    public override void Run(Menu _menu)
-    {
-        menu = _menu;
-        while (Console.ReadKey(true).Key != ConsoleKey.Enter && !stopped)
+    public override void HandleKey(ConsoleKeyInfo? cki2) {
+        if (cki2 == null)
         {
-            ConsoleKeyInfo cki;
-            cki = Console.ReadKey(true);
+            Run();
+            return;
+        }
+        ConsoleKeyInfo cki = (ConsoleKeyInfo)cki2;
+        if (canChange)
+        {
             if ((cki.Key == ConsoleKey.W || cki.Key == ConsoleKey.UpArrow) && dir != Direction.Down)
             {
                 dir = Direction.Up;
@@ -179,8 +191,17 @@ public class Snake : Game
                     Resume();
                 }
             }
+            canChange = false;
         }
-        return;
+    }
+    public override void Run()
+    {
+        while (!stopped)
+        {
+            ReadKey();
+        }
+        gameOver.Hide();
+        menu.Show();
     }
     public override void Pause()
     {
@@ -190,9 +211,9 @@ public class Snake : Game
     {
         timer.Stop();
         AddToLeaderboard();
-        stopped = true;
         Console.Clear();
-        menu.Show();
+        gameOver.Show();
+        stopped = true;
     }
     public enum Direction
     {

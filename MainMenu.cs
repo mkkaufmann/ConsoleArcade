@@ -20,4 +20,38 @@ public class MainMenu : Menu
         lines[13] = "|      Press Q to Quit       |";
         lines[14] = "\\============================/";
     }
+    public override void Show()
+    {
+        base.Show();
+        while (true)
+        {
+            ConsoleKeyInfo cki = Console.ReadKey(true);
+            if (cki.Key == ConsoleKey.D1)
+            {
+                Hide();
+                Snake snake = new Snake(this);
+                break;
+            }
+            else if (cki.Key == ConsoleKey.D2)
+            {
+                break;
+            }
+            else if (cki.Key == ConsoleKey.D3)
+            {
+                break;
+            }
+            else if (cki.Key == ConsoleKey.D4)
+            {
+                break;
+            }
+            else if (cki.Key == ConsoleKey.D5)
+            {
+                break;
+            }
+            else if (cki.Key == ConsoleKey.Q)
+            {
+                Environment.Exit(0);
+            }
+        }
+    }
 }
