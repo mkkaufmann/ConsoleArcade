@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 public class MainMenu : Menu
 {
@@ -23,35 +24,42 @@ public class MainMenu : Menu
     public override void Show()
     {
         base.Show();
-        while (true)
+        getKey();
+    }
+    public void getKey()
+    {
+        var task = Task.Run(() => Console.ReadKey(true));
+        bool read = task.Wait(3000);
+        if (read)
+            HandleKey(task.Result);
+        else if(visible)
+            getKey();
+    }
+    public void  HandleKey(ConsoleKeyInfo? cki2)
+    {
+        ConsoleKeyInfo cki = (ConsoleKeyInfo)cki2;
+        if (cki.Key == ConsoleKey.D1)
         {
-            ConsoleKeyInfo cki = Console.ReadKey(true);
-            if (cki.Key == ConsoleKey.D1)
-            {
-                Hide();
-                Snake snake = new Snake(this);
-                break;
-            }
-            else if (cki.Key == ConsoleKey.D2)
-            {
-                break;
-            }
-            else if (cki.Key == ConsoleKey.D3)
-            {
-                break;
-            }
-            else if (cki.Key == ConsoleKey.D4)
-            {
-                break;
-            }
-            else if (cki.Key == ConsoleKey.D5)
-            {
-                break;
-            }
-            else if (cki.Key == ConsoleKey.Q)
-            {
-                Environment.Exit(0);
-            }
+            Hide();
+            Snake snake = new Snake(this);
+            return;
         }
+        else if (cki.Key == ConsoleKey.D2)
+        {
+        }
+        else if (cki.Key == ConsoleKey.D3)
+        {
+        }
+        else if (cki.Key == ConsoleKey.D4)
+        {
+        }
+        else if (cki.Key == ConsoleKey.D5)
+        {
+        }
+        else if (cki.Key == ConsoleKey.Q)
+        {
+            Environment.Exit(0);
+        }
+        getKey();
     }
 }

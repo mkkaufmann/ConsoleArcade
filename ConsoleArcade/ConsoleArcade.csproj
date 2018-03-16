@@ -45,6 +45,9 @@
     <Compile Include="..\Game.cs">
       <Link>Game.cs</Link>
     </Compile>
+    <Compile Include="..\Leaderboard.cs">
+      <Link>Leaderboard.cs</Link>
+    </Compile>
     <Compile Include="..\MainMenu.cs">
       <Link>MainMenu.cs</Link>
     </Compile>

@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 public class Game
 {
     public int score = 0;
-	public Game()
+    public string name;
+    public Leaderboard leaderboard;
+    public Game()
 	{
 
 	}
@@ -25,7 +27,7 @@ public class Game
     }
     public void AddToLeaderboard()
     {
-
+        
     }
     public virtual void ReadKey()
     {

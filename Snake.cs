@@ -14,7 +14,6 @@ public class Snake : Game
     private Random rand;//rng
     private System.Timers.Timer timer;
     private Direction dir;
-    private string name = "Snake";
     private bool stopped = false;
     public Menu menu;
     private Menu gameOver;
@@ -30,6 +29,7 @@ public class Snake : Game
         timer.AutoReset = true;
         timer.Elapsed += timerElapsed;
         dir = Direction.Up;
+        name = "Snake";
         //put the snake in the center
         body.Add(new Point(60, 17));
         body.Add(new Point(60, 16));
@@ -210,10 +210,11 @@ public class Snake : Game
     public override void Stop()
     {
         timer.Stop();
-        AddToLeaderboard();
         Console.Clear();
         gameOver.Show();
         stopped = true;
+        Task leaderboard = new Task(AddToLeaderboard);
+        Task.WaitAny();
     }
     public enum Direction
     {

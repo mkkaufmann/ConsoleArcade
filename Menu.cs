@@ -3,6 +3,7 @@ using System.IO;
 public class Menu
 {
     public string[] lines;
+    public bool visible = false;
 	public Menu()
 	{
         lines = new string[15];
@@ -18,6 +19,7 @@ public class Menu
     }
     public virtual void Show()
     {
+        visible = true;
         for (int i = 0; i < 15; i++)
         {
             Console.SetCursorPosition(45, i + 7);
@@ -27,6 +29,7 @@ public class Menu
     }
     public virtual void Hide()
     {
+        visible = false;
         for (int i = 0; i < 15; i++)
         {
             Console.SetCursorPosition(45, i + 7);
