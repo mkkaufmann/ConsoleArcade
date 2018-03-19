@@ -27,7 +27,7 @@ public class Game
     }
     public void AddToLeaderboard()
     {
-        
+        leaderboard.Add(score);
     }
     public virtual void ReadKey()
     {

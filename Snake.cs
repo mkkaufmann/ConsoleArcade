@@ -30,6 +30,7 @@ public class Snake : Game
         timer.Elapsed += timerElapsed;
         dir = Direction.Up;
         name = "Snake";
+        leaderboard = new Leaderboard(name);
         //put the snake in the center
         body.Add(new Point(60, 17));
         body.Add(new Point(60, 16));
@@ -200,8 +201,6 @@ public class Snake : Game
         {
             ReadKey();
         }
-        gameOver.Hide();
-        menu.Show();
     }
     public override void Pause()
     {
@@ -211,10 +210,11 @@ public class Snake : Game
     {
         timer.Stop();
         Console.Clear();
-        gameOver.Show();
         stopped = true;
-        Task leaderboard = new Task(AddToLeaderboard);
-        Task.WaitAny();
+        gameOver.Show();
+        Task leaderboardTask = new Task(()=>leaderboard.Add(score));
+        leaderboardTask.Start();
+        leaderboardTask.Wait();
     }
     public enum Direction
     {
