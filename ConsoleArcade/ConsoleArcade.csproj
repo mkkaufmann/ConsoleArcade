@@ -57,6 +57,9 @@
     <Compile Include="..\Point.cs">
       <Link>Point.cs</Link>
     </Compile>
+    <Compile Include="..\Pong.cs">
+      <Link>Pong.cs</Link>
+    </Compile>
     <Compile Include="..\Snake.cs">
       <Link>Snake.cs</Link>
     </Compile>

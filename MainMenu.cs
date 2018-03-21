@@ -52,6 +52,9 @@ public class MainMenu : Menu
         }
         else if (cki.Key == ConsoleKey.D4)
         {
+            Hide();
+            Pong pong = new Pong();
+            return;
         }
         else if (cki.Key == ConsoleKey.D5)
         {
