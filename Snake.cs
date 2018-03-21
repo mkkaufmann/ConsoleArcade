@@ -215,6 +215,7 @@ public class Snake : Game
         Task leaderboardTask = new Task(()=>leaderboard.Add(score));
         leaderboardTask.Start();
         leaderboardTask.Wait();
+        menu.Show();
     }
     public enum Direction
     {

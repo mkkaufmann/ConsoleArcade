@@ -52,7 +52,7 @@ public class Leaderboard:Menu
         }
         Menu nameMenu = new Menu("enterName.txt");
         nameMenu.Show();
-        Console.SetCursorPosition(0,0);
+        Console.SetCursorPosition(47,12);
         List<char> playerName = new List<char>();
         ConsoleKeyInfo cki;
         Point cursor=new Point(0,0);
