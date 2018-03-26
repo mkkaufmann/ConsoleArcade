@@ -162,6 +162,17 @@ public class Snake : Game
             return;
         }
         ConsoleKeyInfo cki = (ConsoleKeyInfo)cki2;
+        if (cki.Key == ConsoleKey.Escape)
+        {
+            if (timer.Enabled)
+            {
+                Pause();
+            }
+            else
+            {
+                Resume();
+            }
+        }
         if (canChange)
         {
             if ((cki.Key == ConsoleKey.W || cki.Key == ConsoleKey.UpArrow) && dir != Direction.Down)
@@ -180,17 +191,7 @@ public class Snake : Game
             {
                 dir = Direction.Right;
             }
-            if (cki.Key == ConsoleKey.Escape)
-            {
-                if (timer.Enabled)
-                {
-                    Pause();
-                }
-                else
-                {
-                    Resume();
-                }
-            }
+           
             canChange = false;
         }
     }
@@ -213,8 +214,6 @@ public class Snake : Game
         Console.Clear();
         gameOver.Show();
         stopped = true;
-        Task leaderboard = new Task(AddToLeaderboard);
-        Task.WaitAny();
     }
     public enum Direction
     {

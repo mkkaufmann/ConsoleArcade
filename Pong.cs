@@ -23,26 +23,53 @@ public class Pong:Game
             bottomY = _bottomY;
             x = _x;
         }
+
+    }
+    public override void Pause()
+    {
+        timer.Stop();
+    }
+    public override void Resume()//draw the snake and the food again
+    {
+        timer.Start();
+    }
+    public override void Run()
+    {
+        while (!stopped)
+        {
+            ReadKey();
+        }
+        gameOver.Hide();
+        menu.Show();
     }
     Timer timer = new Timer();
     Ball ball;
     Paddle player;
     Paddle enemy;
     Random rng;
+    bool stopped;
+    public Menu gameOver;
+    public MainMenu menu;
     bool canChange = true;
+    private bool aiMove = false;
     public Pong()
     {
         ball = new Ball(Console.WindowWidth / 4, Console.WindowHeight / 2, 1, 0);
-        player = new Paddle(Console.WindowHeight / 2 - 3, Console.WindowHeight / 2 + 3, 2);
+        player = new Paddle(Console.WindowHeight / 2 - 3, Console.WindowHeight / 2 + 2, 2);
         enemy = new Paddle(Console.WindowHeight / 2 - 3, Console.WindowHeight / 2 + 3, (Console.WindowWidth/2)-2);
+        menu = new MainMenu();
+        stopped = false;
+        gameOver = new Menu("gameOver.txt");
         rng = new Random();
-        drawFirst();
+        DrawFirst();
         timer.Interval = 100;
         timer.Elapsed += timerElapsed;
         timer.Enabled = true;
+        Run();
         Console.ReadLine();
+
 	}
-    private void drawFirst()
+    private void DrawFirst()
     {
         Console.BackgroundColor = ConsoleColor.Green;
         Console.SetCursorPosition(ball.x * 2, ball.y);
@@ -59,21 +86,54 @@ public class Pong:Game
             Console.Write(" ");
         }
     }
-    private void draw()
+    private void Draw()
     {
+        aiMove = !aiMove;
+        if (aiMove)
+        {
+            if (ball.y < enemy.topY)
+            {
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.SetCursorPosition(enemy.x * 2, enemy.bottomY);
+                Console.Write(" ");
+                enemy.bottomY -= 1;
+                enemy.topY -= 1;
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.SetCursorPosition(enemy.x * 2, enemy.topY);
+                Console.Write(" ");
+            }
+            else if (ball.y > enemy.bottomY)
+            {
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.SetCursorPosition(enemy.x * 2, enemy.topY);
+                Console.Write(" ");
+                enemy.bottomY += 1;
+                enemy.topY += 1;
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.SetCursorPosition(enemy.x * 2, enemy.bottomY);
+                Console.Write(" ");
+            }
+        }
         canChange = true;
         Console.BackgroundColor = ConsoleColor.Black;
-        Console.SetCursorPosition(ball.x * 2, ball.y);
+        try
+        {
+            Console.SetCursorPosition(ball.x * 2, ball.y);
+        }catch//ball goes below zero
+        {
+            Stop();//game over
+        }
         Console.Write("  ");
-        if ((ball.x == player.x && ball.y <= player.bottomY && ball.y >= player.topY))
+        if ((ball.x == player.x && ball.y < player.bottomY && ball.y > player.topY))
         {
             Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.SetCursorPosition(ball.x * 2+1, ball.y);
             Console.Write(" ");
         }
-        if(ball.x == enemy.x && ball.y <= enemy.bottomY && ball.y >= enemy.topY)
+        if(ball.x == enemy.x && ball.y < enemy.bottomY && ball.y > enemy.topY)
         {
             Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.SetCursorPosition(ball.x * 2, ball.y);
             Console.Write(" ");
         }
         ball.x += ball.xV;
@@ -115,14 +175,18 @@ public class Pong:Game
         Console.BackgroundColor = ConsoleColor.Green;
         Console.SetCursorPosition(ball.x * 2, ball.y);
         Console.Write("  ");
+
     }
     public override void Stop()
     {
-        base.Stop();
+        timer.Stop();
+        Console.Clear();
+        gameOver.Show();
+        stopped = true;
     }
     private void timerElapsed(object sender, ElapsedEventArgs e)
     {
-        draw();
+        Draw();
     }
     public override void HandleKey(ConsoleKeyInfo? cki2)
     {
@@ -132,27 +196,42 @@ public class Pong:Game
             return;
         }
         ConsoleKeyInfo cki = (ConsoleKeyInfo)cki2;
+        if (cki.Key == ConsoleKey.Escape)
+        {
+            if (timer.Enabled)
+            {
+                Pause();
+            }
+            else
+            {
+                Resume();
+            }
+        }
         if (canChange)
         {
-            if (cki.Key == ConsoleKey.W || cki.Key == ConsoleKey.UpArrow)
+            if ((cki.Key == ConsoleKey.W || cki.Key == ConsoleKey.UpArrow)&&player.topY>0)
             {
-                int newTY = player.topY - 1;
-                int newBY = player.bottomY - 1;
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.SetCursorPosition(player.x*2+1, player.bottomY);
+                Console.Write(" ");
+                player.bottomY -= 1;
+                player.topY -= 1;
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.SetCursorPosition(player.x * 2 + 1, player.topY);
+                Console.Write(" ");
             }
-            else if (cki.Key == ConsoleKey.S || cki.Key == ConsoleKey.DownArrow)
+            else if ((cki.Key == ConsoleKey.S || cki.Key == ConsoleKey.DownArrow)&&player.bottomY<Console.WindowHeight)
             {
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.SetCursorPosition(player.x * 2 + 1, player.topY);
+                Console.Write(" ");
+                player.bottomY += 1;
+                player.topY += 1;
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.SetCursorPosition(player.x * 2 + 1, player.bottomY);
+                Console.Write(" ");
             }
-            if (cki.Key == ConsoleKey.Escape)
-            {
-                if (timer.Enabled)
-                {
-                    Pause();
-                }
-                else
-                {
-                    Resume();
-                }
-            }
+            
             canChange = false;
         }
     }
