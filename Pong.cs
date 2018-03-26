@@ -56,7 +56,7 @@ public class Pong:Game
     {
         ball = new Ball(Console.WindowWidth / 4, Console.WindowHeight / 2, 1, 0);
         player = new Paddle(Console.WindowHeight / 2 - 3, Console.WindowHeight / 2 + 2, 2);
-        enemy = new Paddle(Console.WindowHeight / 2 - 3, Console.WindowHeight / 2 + 3, (Console.WindowWidth/2)-2);
+        enemy = new Paddle(Console.WindowHeight / 2 - 3, Console.WindowHeight / 2 + 2, (Console.WindowWidth/2)-2);
         menu = new MainMenu();
         stopped = false;
         gameOver = new Menu("gameOver.txt");
