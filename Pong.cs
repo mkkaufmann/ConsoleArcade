@@ -66,7 +66,7 @@ public class Pong:Game
         timer.Elapsed += timerElapsed;
         timer.Enabled = true;
         Run();
-        Console.ReadLine();
+        Console.ReadKey(true);
 
 	}
     private void DrawFirst()
@@ -190,6 +190,10 @@ public class Pong:Game
     }
     public override void HandleKey(ConsoleKeyInfo? cki2)
     {
+        if (stopped)
+        {
+            return;
+        }
         if (cki2 == null)
         {
             Run();

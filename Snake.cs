@@ -25,7 +25,7 @@ public class Snake : Game
         rand = new Random();
         body = new List<Point>();
         timer = new System.Timers.Timer();
-        timer.Interval = 150;
+        timer.Interval = 100;
         timer.AutoReset = true;
         timer.Elapsed += timerElapsed;
         dir = Direction.Up;

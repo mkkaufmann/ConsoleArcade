@@ -10,13 +10,13 @@ public class MainMenu : Menu
         lines[2] = "|                            |";
         lines[3] = "|     Press 1 for Snake      |";
         lines[4] = "|                            |";
-        lines[5] = "|     Press 2 for Tetris     |";
+        lines[5] = "|     Press 2 for            |";
         lines[6] = "|                            |";
-        lines[7] = "|     Press 3 for Pacman     |";
+        lines[7] = "|     Press 3 for            |";
         lines[8] = "|                            |";
         lines[9] = "|      Press 4 for Pong      |";
         lines[10] = "|                            |";
-        lines[11] = "|    Press 5 for Hi-Scores   |";
+        lines[11] = "|    Press 5 for             |";
         lines[12] = "|                            |";
         lines[13] = "|      Press Q to Quit       |";
         lines[14] = "\\============================/";

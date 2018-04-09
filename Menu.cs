@@ -20,6 +20,7 @@ public class Menu
     public virtual void Show()
     {
         visible = true;
+        Console.BackgroundColor = ConsoleColor.Black;
         for (int i = 0; i < 15; i++)
         {
             Console.SetCursorPosition(45, i + 7);
