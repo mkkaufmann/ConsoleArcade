@@ -10,7 +10,7 @@ public class MainMenu : Menu
         lines[2] = "|                            |";
         lines[3] = "|     Press 1 for Snake      |";
         lines[4] = "|                            |";
-        lines[5] = "|     Press 2 for            |";
+        lines[5] = "|     Press 2 for Tetris     |";
         lines[6] = "|                            |";
         lines[7] = "|     Press 3 for            |";
         lines[8] = "|                            |";
@@ -46,6 +46,9 @@ public class MainMenu : Menu
         }
         else if (cki.Key == ConsoleKey.D2)
         {
+            Hide();
+            Tetris tetris = new Tetris();
+            return;
         }
         else if (cki.Key == ConsoleKey.D3)
         {

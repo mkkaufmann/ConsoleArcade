@@ -91,6 +91,9 @@
     <Compile Include="..\Snake.cs">
       <Link>Snake.cs</Link>
     </Compile>
+    <Compile Include="..\Tetris.cs">
+      <Link>Tetris.cs</Link>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
