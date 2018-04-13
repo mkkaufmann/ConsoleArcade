@@ -201,44 +201,46 @@ public class Tetris : Game
             droppingBlock.xPos = rng.Next(droppingBlock.minX, droppingBlock.maxX);
             droppingBlock.yPos = 0;
         }
-        for (int i = 0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
             int x = droppingBlock.xPos + droppingBlock.xOffsets[i];
-            int y = droppingBlock.yPos + droppingBlock.yOffsets[i];
-            if (y == 20)
+            int y = droppingBlock.yPos + droppingBlock.yOffsets[i] + 1;
+            if (y == 21)
             {
+                prevX = -1;
+                prevY = -1;
                 blockDropping = false;
-                break;
+                return;
             }
-            foreach(Block b in blocks)
+            foreach (Block b in blocks)
             {
                 if (b == droppingBlock)
                     continue;
-                for(int k = 0; k<4; k++)
+                for (int k = 0; k < 4; k++)
                 {
-                    if((b.xPos+b.xOffsets[k] == x && b.yPos + b.yOffsets[k]==y))
+                    if ((b.xPos + b.xOffsets[k] == x && b.yPos + b.yOffsets[k] == y))
                     {
                         blockDropping = false;
-                        break;
+                        prevX = -1;
+                        prevY = -1;
+                        return;
                     }
                 }
-                if (!blockDropping)
-                {
-                    break;
-                }
             }
-            if (!blockDropping)
-            {
-                break;
-            }
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            int x = droppingBlock.xPos + droppingBlock.xOffsets[i];
+            int y = droppingBlock.yPos + droppingBlock.yOffsets[i];
             if (prevX != -1 && prevY != -1)
             {
+
                 x = prevX + droppingBlock.xOffsets[i];
                 y = prevY + droppingBlock.yOffsets[i];
                 if (y >= 0)
                 {
                     Console.BackgroundColor = ConsoleColor.Black;
-                    Console.SetCursorPosition(x * 2+(Console.WindowWidth/2-10), y);
+                    Console.SetCursorPosition(x * 2 + (Console.WindowWidth / 2 - 10), y);
                     Console.Write("  ");
                 }
             }
@@ -247,16 +249,14 @@ public class Tetris : Game
             if (y >= 0)
             {
                 Console.BackgroundColor = ConsoleColor.Green;
-                Console.SetCursorPosition(x * 2 + (Console.WindowWidth/2 - 10), y);
-                Console.Write("  ");
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.SetCursorPosition(x * 2 + (Console.WindowWidth / 2 - 10), y);
+                Console.Write("[]");
             }
         }
-        if (blockDropping)
-        {
-            prevX = droppingBlock.xPos;
-            prevY = droppingBlock.yPos;
-            droppingBlock.yPos += 1;
-        }
+        prevX = droppingBlock.xPos;
+        prevY = droppingBlock.yPos;
+        droppingBlock.yPos += 1;
     }
     public override void Stop()
     {
@@ -294,7 +294,10 @@ public class Tetris : Game
         }
         if (canChange)
         {
-
+            if (cki.Key == ConsoleKey.LeftArrow || cki.Key == ConsoleKey.A)
+            {
+                
+            }
             canChange = false;
         }
     }
