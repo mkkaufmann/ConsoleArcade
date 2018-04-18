@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 /*
  * Michael Kaufmann
- * March 2018
+ * March-April 2018
  * Console Arcade
  */
 namespace ConsoleArcade
