@@ -219,7 +219,7 @@ public class Tetris : Game
         gameOver = new Menu("gameOver.txt");
         rng = new Random();
         DrawFirst();
-        timer.Interval = 100;
+        timer.Interval = 150;
         timer.Elapsed += timerElapsed;
         timer.Enabled = true;
         blocks = new List<Block>();
@@ -315,7 +315,7 @@ public class Tetris : Game
                 prevR = Rotation.r0;
                 blockDropping = false;
                 hardDrop = false;
-                timer.Interval = 100;
+                timer.Interval = 150;
                 return;
             }
             foreach (Block b in blocks)
@@ -346,11 +346,12 @@ public class Tetris : Game
                 }
             }
         }
+
         if (prevX != -1 && prevY != -1)
         {
             for (int i = 0; i < 4; i++)
             {
-                if(droppingBlock.GetType() != new BlockO().GetType())
+                if (droppingBlock.GetType() != new BlockO().GetType())
                 {
                     switch (prevR)
                     {
@@ -371,12 +372,13 @@ public class Tetris : Game
                             y = prevY + droppingBlock.yOffsets[i];
                             break;
                     }
-                }else
+                }
+                else
                 {
                     x = prevX + droppingBlock.xOffsets[i];
                     y = prevY + droppingBlock.yOffsets[i];
                 }
-                
+
                 if (y >= 0)
                 {
                     Console.BackgroundColor = ConsoleColor.Black;
@@ -399,7 +401,10 @@ public class Tetris : Game
         prevX = droppingBlock.xPos;
         prevY = droppingBlock.yPos;
         prevR = droppingBlock.r;
-        droppingBlock.yPos += 1;
+        if (blockDropping)
+        {
+            droppingBlock.yPos += 1;
+        }
     }
     public override void Stop()
     {
@@ -436,61 +441,65 @@ public class Tetris : Game
                 Resume();
             }
         }
-        if (canChange && !hardDrop && blockDropping)
+        if (!hardDrop && blockDropping)
         {
-            int x;
-            int y;
-            if (cki.Key == ConsoleKey.LeftArrow || cki.Key == ConsoleKey.A)
+            if (canChange)
             {
-                bool canMove = true;
-                for (int i = 0; i < 4; i++)
+                int x;
+                int y;
+                if (cki.Key == ConsoleKey.LeftArrow || cki.Key == ConsoleKey.A)
                 {
-                    x = droppingBlock.xByR(i) - 1;
-                    y = droppingBlock.yByR(i);
-                    foreach (Block b in blocks)
+                    bool canMove = true;
+                    for (int i = 0; i < 4; i++)
                     {
-                        if (b == droppingBlock)
-                            continue;
-                        for (int k = 0; k < 4; k++)
+                        x = droppingBlock.xByR(i) - 1;
+                        y = droppingBlock.yByR(i);
+                        foreach (Block b in blocks)
                         {
-                            if ((b.xByR(k) == x && b.yByR(k) == y))
+                            if (b == droppingBlock)
+                                continue;
+                            for (int k = 0; k < 4; k++)
                             {
-                                canMove = false;
+                                if ((b.xByR(k) == x && b.yByR(k) == y))
+                                {
+                                    canMove = false;
+                                }
                             }
                         }
                     }
-                }
-                if (blockDropping && droppingBlock.xPos > droppingBlock.minX && canMove)
-                {
-                    droppingBlock.xPos -= 1;
-                }
-            }
-            else if (cki.Key == ConsoleKey.RightArrow || cki.Key == ConsoleKey.D)
-            {
-                bool canMove = true;
-                for (int i = 0; i < 4; i++)
-                {
-                    x = droppingBlock.xByR(i) + 1;
-                    y = droppingBlock.yByR(i);
-                    foreach (Block b in blocks)
+                    if (blockDropping && droppingBlock.xPos > droppingBlock.minX && canMove)
                     {
-                        if (b == droppingBlock)
-                            continue;
-                        for (int k = 0; k < 4; k++)
+                        droppingBlock.xPos -= 1;
+                    }
+                }
+                else if (cki.Key == ConsoleKey.RightArrow || cki.Key == ConsoleKey.D)
+                {
+                    bool canMove = true;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        x = droppingBlock.xByR(i) + 1;
+                        y = droppingBlock.yByR(i);
+                        foreach (Block b in blocks)
                         {
-                            if ((b.xByR(k) == x && b.yPos + b.yByR(k) == y))
+                            if (b == droppingBlock)
+                                continue;
+                            for (int k = 0; k < 4; k++)
                             {
-                                canMove = false;
+                                if ((b.xByR(k) == x && b.yPos + b.yByR(k) == y))
+                                {
+                                    canMove = false;
+                                }
                             }
                         }
                     }
-                }
-                if (blockDropping && droppingBlock.xPos < droppingBlock.maxX - 1 && canMove)
-                {
-                    droppingBlock.xPos += 1;
+                    if (blockDropping && droppingBlock.xPos < droppingBlock.maxX - 1 && canMove)
+                    {
+                        droppingBlock.xPos += 1;
+                    }
                 }
             }
-            else if (cki.Key == ConsoleKey.UpArrow || cki.Key == ConsoleKey.W)
+
+            if (cki.Key == ConsoleKey.UpArrow || cki.Key == ConsoleKey.W)
             {
                 Rotation desiredR;
                 switch (droppingBlock.r)
