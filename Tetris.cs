@@ -20,6 +20,17 @@ public class Tetris : Game
     bool hardDrop = false;
     Block droppingBlock;
     List<Block> blocks;
+    List<SquareLoc> tetris = new List<SquareLoc>();
+    struct SquareLoc
+    {
+        public Square s;
+        public Block b;
+        public SquareLoc(Square s, Block b)
+        {
+            this.s = s;
+            this.b = b;
+        }
+    }
     enum Rotation
     {
         r0,
@@ -27,12 +38,21 @@ public class Tetris : Game
         r180,
         r270
     }
+    private class Square
+    {
+        public int x;
+        public int y;
+        public Square(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    }
     private class Block
     {
         public int xPos;
         public int yPos;
-        public int[] xOffsets;
-        public int[] yOffsets;
+        public List<Square> offsets;
         public int minX;
         public int maxX;
         public ConsoleColor c;
@@ -42,13 +62,13 @@ public class Tetris : Game
             switch (r)
             {
                 case Rotation.r90:
-                    return xPos + yOffsets[i];
+                    return xPos + offsets[i].y;
                 case Rotation.r180:
-                    return xPos - xOffsets[i];
+                    return xPos - offsets[i].x;
                 case Rotation.r270:
-                    return xPos - yOffsets[i];
+                    return xPos - offsets[i].y;
                 default:
-                    return xPos + xOffsets[i];
+                    return xPos + offsets[i].x;
             }
         }
         public virtual int yByR(int i)
@@ -56,13 +76,13 @@ public class Tetris : Game
             switch (r)
             {
                 case Rotation.r90:
-                    return yPos - xOffsets[i];
+                    return yPos - offsets[i].x;
                 case Rotation.r180:
-                    return yPos - yOffsets[i];
+                    return yPos - offsets[i].y;
                 case Rotation.r270:
-                    return yPos + xOffsets[i];
+                    return yPos + offsets[i].x;
                 default:
-                    return yPos + yOffsets[i];
+                    return yPos + offsets[i].y;
             }
         }
         public virtual int xByR(int i, Rotation r)
@@ -70,13 +90,13 @@ public class Tetris : Game
             switch (r)
             {
                 case Rotation.r90:
-                    return xPos + yOffsets[i];
+                    return xPos + offsets[i].y;
                 case Rotation.r180:
-                    return xPos - xOffsets[i];
+                    return xPos - offsets[i].x;
                 case Rotation.r270:
-                    return xPos - yOffsets[i];
+                    return xPos - offsets[i].y;
                 default:
-                    return xPos + xOffsets[i];
+                    return xPos + offsets[i].x;
             }
         }
         public virtual int yByR(int i,Rotation r)
@@ -84,13 +104,13 @@ public class Tetris : Game
             switch (r)
             {
                 case Rotation.r90:
-                    return yPos - xOffsets[i];
+                    return yPos - offsets[i].x;
                 case Rotation.r180:
-                    return yPos - yOffsets[i];
+                    return yPos - offsets[i].y;
                 case Rotation.r270:
-                    return yPos + xOffsets[i];
+                    return yPos + offsets[i].x;
                 default:
-                    return yPos + yOffsets[i];
+                    return yPos + offsets[i].y;
             }
         }
     }
@@ -105,8 +125,7 @@ public class Tetris : Game
          */
         public BlockI()
         {
-            xOffsets = new int[4] { 0, 0, 0, 0 };
-            yOffsets = new int[4] { 1, 0, -1, -2 };
+            offsets = new List<Square> { new Square(0,1), new Square(0,0), new Square(0,-1), new Square(0,-2) };
             minX = 0;
             maxX = 10;
         }
@@ -119,8 +138,7 @@ public class Tetris : Game
          */
         public BlockJ()
         {
-            xOffsets = new int[4] { 0, -1, 1, -1 };
-            yOffsets = new int[4] { 0, -1, 0, 0 };
+            offsets = new List<Square> { new Square(0, 0), new Square(-1, -1), new Square(1, 0), new Square(-1, 0) };
             minX = 1;
             maxX = 9;
         }
@@ -133,8 +151,7 @@ public class Tetris : Game
          */
         public BlockL()
         {
-            xOffsets = new int[] { -1, 0, 1, 1 };
-            yOffsets = new int[] { 0, 0, 0, -1 };
+            offsets = new List<Square> { new Square(-1, 0), new Square(0, 0), new Square(1, 0), new Square(1, -1) };
             minX = 1;
             maxX = 9;
         }
@@ -147,26 +164,25 @@ public class Tetris : Game
          */
         public BlockO()
         {
-            xOffsets = new int[] { 0, 0, 1, 1 };
-            yOffsets = new int[] { 0, -1, 0, -1 };
+            offsets = new List<Square> { new Square(1, 0), new Square(0, 0), new Square(0,-1), new Square(1, -1) };
             minX = 0;
             maxX = 9;
         }
         public override int xByR(int i)
         {
-            return xPos + xOffsets[i];
+            return xPos + offsets[i].x;
         }
         public override int yByR(int i)
         {
-            return yPos + yOffsets[i];
+            return yPos + offsets[i].y;
         }
         public override int xByR(int i,Rotation r)
         {
-            return xPos + xOffsets[i];
+            return xPos + offsets[i].x;
         }
         public override int yByR(int i, Rotation r)
         {
-            return yPos + yOffsets[i];
+            return yPos + offsets[i].y;
         }
     }
     private class BlockS : Block
@@ -177,8 +193,7 @@ public class Tetris : Game
          */
         public BlockS()
         {
-            xOffsets = new int[] { -1, 0, 0, 1 };
-            yOffsets = new int[] { 0, 0, -1, -1 };
+            offsets = new List<Square> { new Square(-1, 0), new Square(0, 0), new Square(1, -1), new Square(0, -1) };
             minX = 1;
             maxX = 9;
         }
@@ -191,8 +206,7 @@ public class Tetris : Game
          */
         public BlockT()
         {
-            xOffsets = new int[] { -1, 0, 1, 0 };
-            yOffsets = new int[] { 0, 0, 0, -1 };
+            offsets = new List<Square> { new Square(-1, 0), new Square(0, 0), new Square(1, 0), new Square(0, -1) };
             minX = 1;
             maxX = 9;
         }
@@ -205,8 +219,7 @@ public class Tetris : Game
          */
         public BlockZ()
         {
-            xOffsets = new int[] { 0, 1, 0, -1 };
-            yOffsets = new int[] { 0, 0, -1, -1 };
+            offsets = new List<Square> { new Square(1, 0), new Square(0, 0), new Square(0, -1), new Square(-1, -1) };
             minX = 1;
             maxX = 9;
         }
@@ -252,20 +265,34 @@ public class Tetris : Game
 
     private void DrawFirst()
     {
+        Console.BackgroundColor = ConsoleColor.Black;
         Console.Clear();
         for (int i = 1; i < 21; i++)
         {
-            Console.SetCursorPosition(Console.WindowWidth / 2 - 12, i + Y_OFFSET);
+            Console.SetCursorPosition(Console.WindowWidth / 2 - 12, i + Y_OFFSET+1);
             Console.BackgroundColor = ConsoleColor.Gray;
             Console.Write("  ");
-            Console.SetCursorPosition(Console.WindowWidth / 2 + 10, i + Y_OFFSET);
+            Console.SetCursorPosition(Console.WindowWidth / 2 + 10, i + Y_OFFSET+1);
             Console.Write("  ");
         }
         for (int i = 0; i < 10; i++)
         {
-            Console.SetCursorPosition(Console.WindowWidth / 2 - 10 + i * 2, 20 + Y_OFFSET);
+            Console.SetCursorPosition(Console.WindowWidth / 2 - 10 + i * 2, 20 + Y_OFFSET+1);
             Console.BackgroundColor = ConsoleColor.Gray;
             Console.Write("  ");
+        }
+    }
+    private void RedrawBoard()
+    {
+        DrawFirst();
+        foreach(Block b in blocks)
+        {
+            Console.BackgroundColor = b.c;
+            for(int i = 0; i<b.offsets.Count; i++)
+            {
+                Console.SetCursorPosition(b.xByR(i) * 2 + (Console.WindowWidth / 2 - 10), b.yByR(i));
+                Console.Write("  ");
+            }
         }
     }
     private void Draw()
@@ -274,7 +301,8 @@ public class Tetris : Game
         if (!blockDropping)
         {
             blockDropping = true;
-            switch (rng.Next(0, 7))
+            //switch (rng.Next(0, 7))
+            switch(rng.Next(0,0))//testing
             {
                 case 0:
                     droppingBlock = new BlockI();
@@ -316,13 +344,62 @@ public class Tetris : Game
                 blockDropping = false;
                 hardDrop = false;
                 timer.Interval = 150;
+                for(int j = 0; j < droppingBlock.offsets.Count; j++)
+                {
+                    x = droppingBlock.xByR(j);
+                    y = droppingBlock.yByR(j) + 1;
+                    tetris.Clear();
+                    tetris.Add(new SquareLoc(droppingBlock.offsets[j], droppingBlock));//last change
+                    /*FIX WEIRD TETRIS OCCURENCES*/
+                    foreach (Block b in blocks)
+                    {
+                        if(b == droppingBlock)
+                        {
+                            continue;
+                        }
+                        for(int k = 0; k < b.offsets.Count; k++)
+                        {
+                            if(b.yByR(k) == y)
+                            {
+                                tetris.Add(new SquareLoc(b.offsets[k], b));
+                                if(tetris.Count == 10)
+                                {
+                                    foreach (SquareLoc sl in tetris)
+                                    {
+                                        sl.b.offsets.Remove(sl.s);
+                                        if (sl.b.offsets.Count == 0)
+                                        {
+                                            blocks.Remove(b);
+                                        }
+                                    }
+                                    foreach(Block b2 in blocks)
+                                    {
+                                        for(int l = 0; l<b2.offsets.Count; l++)
+                                        {
+                                            if (b2.yByR(l) < y)
+                                            {
+                                                b2.offsets[l].y += 1;
+                                            }
+                                        }
+                                    }
+                                    RedrawBoard();
+                                    break;
+                                }
+                            }
+                        }
+                        if (tetris.Count == 10)
+                        {
+                            break;
+                        }
+                    }
+                }
                 return;
             }
             foreach (Block b in blocks)
             {
                 if (b == droppingBlock)
                     continue;
-                for (int k = 0; k < 4; k++)
+                for (int k = 0; k < b.offsets.Count; k++)
                 {
                     if ((b.xByR(k) == x && b.yByR(k) == y))
                     {
@@ -332,7 +409,48 @@ public class Tetris : Game
                         prevY = -1;
                         prevR = Rotation.r0;
                         timer.Interval = 100;
-                        for (int g = 0; g < 4; g++)
+                        for (int j = 0; j < 4; j++)
+                        {
+                            tetris.Clear();
+                            foreach (Block b1 in blocks)
+                            {
+                                for (int g = 0; g < b1.offsets.Count; g++)
+                                {
+                                    if (b1.yByR(g) == y)
+                                    {
+                                        tetris.Add(new SquareLoc(b1.offsets[g], b1));
+                                        if (tetris.Count == 10)
+                                        {
+                                            foreach (SquareLoc sl in tetris)
+                                            {
+                                                sl.b.offsets.Remove(sl.s);
+                                                if(sl.b.offsets.Count == 0)
+                                                {
+                                                    blocks.Remove(b);
+                                                }
+                                            }
+                                            foreach (Block b2 in blocks)
+                                            {
+                                                for (int l = 0; l < b2.offsets.Count; l++)
+                                                {
+                                                    if (b2.yByR(l) < y)
+                                                    {
+                                                        b2.offsets[l].y += 1;
+                                                    }
+                                                }
+                                            }
+                                            RedrawBoard();
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (tetris.Count == 10)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        for (int g = 0; g < droppingBlock.offsets.Count; g++)
                         {
                             y = droppingBlock.yByR(g);
                             if (y <= Y_OFFSET)
@@ -356,27 +474,27 @@ public class Tetris : Game
                     switch (prevR)
                     {
                         case Rotation.r90:
-                            x = prevX + droppingBlock.yOffsets[i];
-                            y = prevY - droppingBlock.xOffsets[i];
+                            x = prevX + droppingBlock.offsets[i].y;
+                            y = prevY - droppingBlock.offsets[i].x;
                             break;
                         case Rotation.r180:
-                            x = prevX - droppingBlock.xOffsets[i];
-                            y = prevY - droppingBlock.yOffsets[i];
+                            x = prevX - droppingBlock.offsets[i].x;
+                            y = prevY - droppingBlock.offsets[i].y;
                             break;
                         case Rotation.r270:
-                            x = prevX - droppingBlock.yOffsets[i];
-                            y = prevY + droppingBlock.xOffsets[i];
+                            x = prevX - droppingBlock.offsets[i].y;
+                            y = prevY + droppingBlock.offsets[i].x;
                             break;
                         default:
-                            x = prevX + droppingBlock.xOffsets[i];
-                            y = prevY + droppingBlock.yOffsets[i];
+                            x = prevX + droppingBlock.offsets[i].x;
+                            y = prevY + droppingBlock.offsets[i].y;
                             break;
                     }
                 }
                 else
                 {
-                    x = prevX + droppingBlock.xOffsets[i];
-                    y = prevY + droppingBlock.yOffsets[i];
+                    x = prevX + droppingBlock.offsets[i].x;
+                    y = prevY + droppingBlock.offsets[i].y;
                 }
 
                 if (y >= 0)
@@ -405,6 +523,7 @@ public class Tetris : Game
         {
             droppingBlock.yPos += 1;
         }
+        RedrawBoard();
     }
     public override void Stop()
     {
@@ -458,7 +577,7 @@ public class Tetris : Game
                         {
                             if (b == droppingBlock)
                                 continue;
-                            for (int k = 0; k < 4; k++)
+                            for (int k = 0; k < b.offsets.Count; k++)
                             {
                                 if ((b.xByR(k) == x && b.yByR(k) == y))
                                 {
@@ -483,7 +602,7 @@ public class Tetris : Game
                         {
                             if (b == droppingBlock)
                                 continue;
-                            for (int k = 0; k < 4; k++)
+                            for (int k = 0; k < b.offsets.Count; k++)
                             {
                                 if ((b.xByR(k) == x && b.yPos + b.yByR(k) == y))
                                 {
@@ -526,7 +645,7 @@ public class Tetris : Game
                     {
                         if (b == droppingBlock)
                             continue;
-                        for (int k = 0; k < 4; k++)
+                        for (int k = 0; k < b.offsets.Count; k++)
                         {
                             if ((b.xByR(k) == x && b.yPos + b.yByR(k) == y))
                             {
@@ -547,7 +666,7 @@ public class Tetris : Game
                    "==._(  Y  )_.=="
         .-'~~""~=--...,__\/|\/__,...--=~""~~'-.
        (               ..=\=/=..               )
-        `'-.        ,.-"`;/=\ ;"-.,_        .-'`
+        `'-.        ,.-"`;/=\;"-.,_        .-'`
             `~"-=-~` .-~` |=| `~-. `~-=-"~`
                  .-~`    /|=|\    `~-.
               .~`       / |=| \       `~.
@@ -586,7 +705,7 @@ public class Tetris : Game
                     {
                         if (b == droppingBlock)
                             continue;
-                        for (int k = 0; k < 4; k++)
+                        for (int k = 0; k < b.offsets.Count; k++)
                         {
                             if ((b.xByR(k) == x && b.yPos + b.yByR(k) == y))
                             {
