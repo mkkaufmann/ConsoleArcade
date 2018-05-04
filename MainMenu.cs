@@ -10,13 +10,13 @@ public class MainMenu : Menu
         lines[2] = "|                            |";
         lines[3] = "|     Press 1 for Snake      |";
         lines[4] = "|                            |";
-        lines[5] = "|     Press 2 for Tetris     |";
+        lines[5] = "|     Press 2 for Garbo      |";
         lines[6] = "|                            |";
-        lines[7] = "|     Press 3 for            |";
+        lines[7] = "|     Press 3 for 2P Pong    |";
         lines[8] = "|                            |";
-        lines[9] = "|      Press 4 for Pong      |";
+        lines[9] = "|   Press 4 for Solo Pong    |";
         lines[10] = "|                            |";
-        lines[11] = "|    Press 5 for             |";
+        lines[11] = "|    Press 5 for NOTHING     |";
         lines[12] = "|                            |";
         lines[13] = "|      Press Q to Quit       |";
         lines[14] = "\\============================/";
@@ -52,11 +52,14 @@ public class MainMenu : Menu
         }
         else if (cki.Key == ConsoleKey.D3)
         {
+            Hide();
+            Pong pong = new Pong(true);
+            return;
         }
         else if (cki.Key == ConsoleKey.D4)
         {
             Hide();
-            Pong pong = new Pong();
+            Pong pong = new Pong(false);
             return;
         }
         else if (cki.Key == ConsoleKey.D5)

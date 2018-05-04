@@ -301,8 +301,7 @@ public class Tetris : Game
         if (!blockDropping)
         {
             blockDropping = true;
-            //switch (rng.Next(0, 7))
-            switch(rng.Next(0,0))//testing
+            switch(rng.Next(0,7))
             {
                 case 0:
                     droppingBlock = new BlockI();

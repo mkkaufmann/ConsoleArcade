@@ -51,9 +51,12 @@ public class Pong:Game
     public Menu gameOver;
     public MainMenu menu;
     bool canChange = true;
+    bool canChange2 = true;
     private bool aiMove = false;
-    public Pong()
+    private bool two_players;
+    public Pong(bool two_players)
     {
+        this.two_players = two_players;
         ball = new Ball(Console.WindowWidth / 4, Console.WindowHeight / 2, 1, 0);
         player = new Paddle(Console.WindowHeight / 2 - 3, Console.WindowHeight / 2 + 2, 2);
         enemy = new Paddle(Console.WindowHeight / 2 - 3, Console.WindowHeight / 2 + 2, (Console.WindowWidth/2)-2);
@@ -88,33 +91,37 @@ public class Pong:Game
     }
     private void Draw()
     {
-        aiMove = !aiMove;
-        if (aiMove)
+        if (!two_players)
         {
-            if (ball.y < enemy.topY)
+            aiMove = !aiMove;
+            if (aiMove)
             {
-                Console.BackgroundColor = ConsoleColor.Black;
-                Console.SetCursorPosition(enemy.x * 2, enemy.bottomY);
-                Console.Write(" ");
-                enemy.bottomY -= 1;
-                enemy.topY -= 1;
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.SetCursorPosition(enemy.x * 2, enemy.topY);
-                Console.Write(" ");
-            }
-            else if (ball.y > enemy.bottomY)
-            {
-                Console.BackgroundColor = ConsoleColor.Black;
-                Console.SetCursorPosition(enemy.x * 2, enemy.topY);
-                Console.Write(" ");
-                enemy.bottomY += 1;
-                enemy.topY += 1;
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.SetCursorPosition(enemy.x * 2, enemy.bottomY);
-                Console.Write(" ");
+                if (ball.y < enemy.topY)
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(enemy.x * 2, enemy.bottomY);
+                    Console.Write(" ");
+                    enemy.bottomY -= 1;
+                    enemy.topY -= 1;
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.SetCursorPosition(enemy.x * 2, enemy.topY);
+                    Console.Write(" ");
+                }
+                else if (ball.y > enemy.bottomY)
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(enemy.x * 2, enemy.topY);
+                    Console.Write(" ");
+                    enemy.bottomY += 1;
+                    enemy.topY += 1;
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.SetCursorPosition(enemy.x * 2, enemy.bottomY);
+                    Console.Write(" ");
+                }
             }
         }
         canChange = true;
+        canChange2 = true;
         Console.BackgroundColor = ConsoleColor.Black;
         try
         {
@@ -169,8 +176,18 @@ public class Pong:Game
         }
         if (ball.x * 2 <=0)
         {
-            Stop();
-            return;
+            if (!two_players)
+            {
+                Stop();
+            }
+            else
+            {
+                ball.x = Console.WindowWidth / 4;
+                ball.y = Console.WindowHeight / 2;
+                ball.xV = 1;
+                ball.yV = 0;
+            }
+
         }
         Console.BackgroundColor = ConsoleColor.Green;
         Console.SetCursorPosition(ball.x * 2, ball.y);
@@ -211,32 +228,91 @@ public class Pong:Game
                 Resume();
             }
         }
-        if (canChange)
+        if (!two_players)
         {
-            if ((cki.Key == ConsoleKey.W || cki.Key == ConsoleKey.UpArrow)&&player.topY>0)
+            if (canChange)
             {
-                Console.BackgroundColor = ConsoleColor.Black;
-                Console.SetCursorPosition(player.x*2+1, player.bottomY);
-                Console.Write(" ");
-                player.bottomY -= 1;
-                player.topY -= 1;
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.SetCursorPosition(player.x * 2 + 1, player.topY);
-                Console.Write(" ");
+                if ((cki.Key == ConsoleKey.W || cki.Key == ConsoleKey.UpArrow) && player.topY > 0)
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(player.x * 2 + 1, player.bottomY);
+                    Console.Write(" ");
+                    player.bottomY -= 1;
+                    player.topY -= 1;
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.SetCursorPosition(player.x * 2 + 1, player.topY);
+                    Console.Write(" ");
+                }
+                else if ((cki.Key == ConsoleKey.S || cki.Key == ConsoleKey.DownArrow) && player.bottomY < Console.WindowHeight)
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(player.x * 2 + 1, player.topY);
+                    Console.Write(" ");
+                    player.bottomY += 1;
+                    player.topY += 1;
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.SetCursorPosition(player.x * 2 + 1, player.bottomY);
+                    Console.Write(" ");
+                }
+
+                canChange = false;
             }
-            else if ((cki.Key == ConsoleKey.S || cki.Key == ConsoleKey.DownArrow)&&player.bottomY<Console.WindowHeight)
+        }else
+        {
+            if (canChange)
             {
-                Console.BackgroundColor = ConsoleColor.Black;
-                Console.SetCursorPosition(player.x * 2 + 1, player.topY);
-                Console.Write(" ");
-                player.bottomY += 1;
-                player.topY += 1;
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.SetCursorPosition(player.x * 2 + 1, player.bottomY);
-                Console.Write(" ");
+                if ((cki.Key == ConsoleKey.W) && player.topY > 0)
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(player.x * 2 + 1, player.bottomY);
+                    Console.Write(" ");
+                    player.bottomY -= 1;
+                    player.topY -= 1;
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.SetCursorPosition(player.x * 2 + 1, player.topY);
+                    Console.Write(" ");
+                }
+                else if ((cki.Key == ConsoleKey.S) && player.bottomY < Console.WindowHeight)
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(player.x * 2 + 1, player.topY);
+                    Console.Write(" ");
+                    player.bottomY += 1;
+                    player.topY += 1;
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.SetCursorPosition(player.x * 2 + 1, player.bottomY);
+                    Console.Write(" ");
+                }
+
+                canChange = false;
             }
-            
-            canChange = false;
+            if (canChange2)
+            {
+                if ((cki.Key == ConsoleKey.UpArrow) && enemy.topY > 0)
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(enemy.x * 2, enemy.bottomY);
+                    Console.Write(" ");
+                    enemy.bottomY -= 1;
+                    enemy.topY -= 1;
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.SetCursorPosition(enemy.x * 2, enemy.topY);
+                    Console.Write(" ");
+                }
+                else if ((cki.Key == ConsoleKey.DownArrow) && enemy.bottomY < Console.WindowHeight)
+                {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(enemy.x * 2, enemy.topY);
+                    Console.Write(" ");
+                    enemy.bottomY += 1;
+                    enemy.topY += 1;
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.SetCursorPosition(enemy.x * 2, enemy.bottomY);
+                    Console.Write(" ");
+                }
+
+                canChange2 = false;
+            }
         }
     }
 }
