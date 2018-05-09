@@ -232,7 +232,7 @@ public class Tetris : Game
         gameOver = new Menu("gameOver.txt");
         rng = new Random();
         DrawFirst();
-        timer.Interval = 150;
+        timer.Interval = 200;
         timer.Elapsed += timerElapsed;
         timer.Enabled = true;
         blocks = new List<Block>();
@@ -342,13 +342,13 @@ public class Tetris : Game
                 prevR = Rotation.r0;
                 blockDropping = false;
                 hardDrop = false;
-                timer.Interval = 150;
+                timer.Interval = 200;
                 for(int j = 0; j < droppingBlock.offsets.Count; j++)
                 {
                     x = droppingBlock.xByR(j);
                     y = droppingBlock.yByR(j) + 1;
                     tetris.Clear();
-                    tetris.Add(new SquareLoc(droppingBlock.offsets[j], droppingBlock));//last change
+                    tetris.Add(new SquareLoc(droppingBlock.offsets[j], droppingBlock));
                     /*FIX WEIRD TETRIS OCCURENCES*/
                     foreach (Block b in blocks)
                     {
@@ -407,7 +407,7 @@ public class Tetris : Game
                         prevX = -1;
                         prevY = -1;
                         prevR = Rotation.r0;
-                        timer.Interval = 100;
+                        timer.Interval = 200;
                         for (int j = 0; j < 4; j++)
                         {
                             tetris.Clear();
