@@ -25,7 +25,7 @@ public class Snake : Game
         rand = new Random();
         body = new List<Point>();
         timer = new System.Timers.Timer();
-        timer.Interval = 70;
+        timer.Interval = 60;
         timer.AutoReset = true;
         timer.Elapsed += timerElapsed;
         dir = Direction.Up;
@@ -106,7 +106,13 @@ public class Snake : Game
             Console.SetCursorPosition(body[0].x, body[0].y);
             Console.BackgroundColor = defaultbg;
             Console.Write("  ");
-            body.RemoveAt(0);
+            try {
+                body.RemoveAt(0);
+            }
+            catch(Exception e)
+            {
+
+            }
         }
         else//if it is, generate a new food
         {

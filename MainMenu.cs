@@ -16,9 +16,9 @@ public class MainMenu : Menu
         lines[8] = "|                            |";
         lines[9] = "|   Press 4 for Solo Pong    |";
         lines[10] = "|                            |";
-        lines[11] = "|    Press 5 for NOTHING     |";
-        lines[12] = "|                            |";
-        lines[13] = "|      Press Q to Quit       |";
+        lines[11] = "|    WASD/Arrows to Move     |";
+        lines[12] = "|        ESC to Pause        |";
+        lines[13] = "| Press Q to Quit (menu only)|";
         lines[14] = "\\============================/";
     }
     public override void Show()
