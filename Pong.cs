@@ -259,6 +259,11 @@ public class Pong:Game
             }
         }else
         {
+            if(cki.Key == ConsoleKey.Q)
+            {
+                Console.BackgroundColor = ConsoleColor.Black;
+                Stop();
+            }
             if (canChange)
             {
                 if ((cki.Key == ConsoleKey.W) && player.topY > 0)
